@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Adaptive Planner V3</title>
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--ink:#292827;--muted:#77736d;--line:#dfddd7;--accent:#65796a;--soft:#e8eee9;--warm:#f1ede6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:1250px;margin:auto;padding:20px}.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:25px;font-weight:750}.sub{font-size:12px;color:var(--muted);margin-top:3px}.nav{display:flex;gap:5px}.nav button,.btn{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 12px;min-height:40px}.nav .active{background:var(--soft);border-color:var(--accent);font-weight:700}.layout{display:grid;grid-template-columns:385px 1fr;gap:17px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}.card h2{font-size:17px;margin:0}.card h3{font-size:13px;margin:20px 0 8px}.muted{color:var(--muted);font-size:12px}.row{display:flex;gap:9px;align-items:center}.grow{flex:1}.bar{height:11px;background:#e8e6e1;border-radius:20px;overflow:hidden}.bar span{display:block;height:100%;background:var(--accent)}.pct{font-size:19px;font-weight:750}.item{padding:10px 0;border-top:1px solid #eee}.item b{font-size:13px}.meta{font-size:11px;color:var(--muted);margin-top:2px}.tiny{height:5px;background:#ebe9e5;border-radius:8px;overflow:hidden;margin-top:6px}.tiny span{display:block;height:100%;background:var(--accent)}input,select,textarea{width:100%;min-height:40px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink);font-size:14px}textarea{min-height:70px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.add{display:grid;grid-template-columns:1fr 80px 42px;gap:5px}.primary{width:100%;min-height:44px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;font-weight:700}.energy{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.energy button{min-height:40px;background:#fff;border:1px solid var(--line);border-radius:8px}.energy button.active{background:var(--soft);border-color:var(--accent);font-weight:700}.chips{display:flex;flex-wrap:wrap;gap:5px}.chip{background:#fff;border:1px solid var(--line);border-radius:99px;padding:7px 10px;font-size:11px}.chip.active{background:var(--soft);border-color:var(--accent)}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.metric{background:var(--warm);padding:9px;border-radius:9px}.metric small{display:block;font-size:10px;color:var(--muted)}.metric strong{font-size:13px}.task{display:grid;grid-template-columns:20px 1fr auto;gap:9px;padding:12px 0;border-top:1px solid #eee}.track{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--muted)}.task b{font-size:13px}.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0}.day{border:1px solid var(--line);border-radius:8px;padding:7px 2px;text-align:center;font-size:10px}.day strong{display:block;font-size:12px}.today{background:var(--soft);border-color:var(--accent)}.notice{background:var(--soft);padding:11px;border-radius:10px;font-size:12px;margin-top:11px}.system{border:1px solid var(--line);border-radius:11px;margin:7px 0;overflow:hidden;background:#fff}.systemhead{display:flex;align-items:center;gap:8px;padding:11px}.systemhead b{flex:1}.children{padding:0 12px 10px 38px}.topic{padding:7px 0;border-top:1px solid #eee;font-size:12px}.pill{font-size:10px;background:var(--warm);padding:3px 7px;border-radius:20px;color:var(--muted)}.hidden{display:none}@media(max-width:900px){.layout{grid-template-columns:1fr}}@media(max-width:600px){.metrics,.two{grid-template-columns:1fr 1fr}.days{grid-template-columns:repeat(4,1fr)}.app{padding:12px}}
+</style>
+</head>
+<body><div class="app">
+<div class="top"><div><div class="brand">Adaptive Planner</div><div class="sub">V3 · curriculum → weekly plan → adaptive day</div></div>
+<div class="nav"><button class="active" data-view="today">Today</button><button data-view="week">Week</button><button data-view="curriculum">Curriculum</button><button data-view="progress">Progress</button></div></div>
+
+<div id="today" class="layout">
+<aside class="card"><h2>This week</h2><div class="muted">Weekly contract stays visible while you plan tonight.</div>
+<div style="margin-top:12px"><div class="row" style="justify-content:space-between"><span class="muted">Week balance</span><b class="pct" id="wp">0%</b></div><div class="bar"><span id="wb" style="width:0%"></span></div></div>
+<div class="days" id="days"></div>
+<h3>Longitudinal</h3><div id="longSide"></div>
+<h3>Immediate</h3><div id="immSide"></div>
+<h3>Running</h3><div id="runSide"></div>
+<h3>Rest / life</h3><div id="restSide"></div></aside>
+
+<main><section class="card"><h2>Tonight's check-in</h2><div class="muted">Plan when you know what the evening actually looks like.</div>
+<div class="two" style="margin-top:12px">
+<div><div class="muted">Current time</div><input id="now" type="time"></div>
+<div><div class="muted">Planned sleep</div><input id="sleep" type="time" value="23:30"></div>
+<div><div class="muted">Study commitment</div><select id="study"><option>.5</option><option>1</option><option selected>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option></select></div>
+<div><div class="muted">Run tonight</div><select id="run"><option value="0">None</option><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">60 min</option><option value="75">75 min</option><option value="90">90 min</option></select></div></div>
+<div style="margin-top:12px"><div class="muted">Energy · <span id="energyText">3 / 5</span></div><div class="energy" id="energy"></div></div>
+<div style="margin-top:12px"><div class="muted">Optional focus</div><div class="chips" id="focus"></div></div>
+<div style="margin-top:12px"><div class="muted">Context / upcoming</div><textarea id="context" placeholder="e.g. renal tutorial tomorrow; late workday; need MDM prep"></textarea></div>
+<div class="metrics"><div class="metric"><small>Until sleep</small><strong id="until">—</strong></div><div class="metric"><small>After run</small><strong id="usable">—</strong></div><div class="metric"><small>Study target</small><strong id="target">1.5h</strong></div><div class="metric"><small>Longitudinal left</small><strong id="left">—</strong></div></div>
+<button class="primary" id="plan" style="margin-top:11px">Plan my evening</button></section>
+
+<section class="card" style="margin-top:14px"><div class="row" style="justify-content:space-between"><div><h2>Tonight's plan</h2><div class="muted" id="summary">Waiting for check-in.</div></div><b id="state" style="font-size:11px;color:var(--accent)">READY</b></div>
+<div id="tasks"><div class="muted" style="padding:14px 0">Your generated plan will appear here.</div></div>
+<div style="display:flex;gap:6px"><button class="btn" id="less">Less time</button><button class="btn" id="more">More time</button><button class="btn" id="recalc">Recalculate</button></div>
+<div class="notice" id="warning" style="display:none"></div></section></main></div>
+
+<div id="week" class="hidden"><section class="card"><h2>Weekly framework</h2><div class="muted">Saturday → Friday. Longitudinal goals come from the overarching curriculum; immediate items are yours.</div>
+<div class="days" id="weekDays"></div><div class="row" style="justify-content:space-between"><span class="muted">How well did I complete the week I intended to have?</span><b class="pct" id="wp2">0%</b></div><div class="bar"><span id="wb2" style="width:0%"></span></div><div id="weekBreakdown" style="margin-top:12px"></div></section></div>
+
+<div id="curriculum" class="hidden"><section class="card"><h2>Curriculum</h2><div class="muted">The master curriculum is the source for longitudinal planning.</div>
+<div class="notice">Add your real systems first, then add topics under each system. We can add topic metadata and automatic weekly generation next.</div>
+<h3>Long-term exam</h3><div class="two"><input id="exam" value="FRCPath Part 1"><input id="examDate" type="date"></div>
+<h3>Master curriculum</h3><div id="tree"></div>
+<div class="add" style="margin-top:10px"><input id="newSystem" placeholder="New system"><span></span><button class="btn" id="addSystem">+</button></div>
+</section></div>
+
+<div id="progress" class="hidden"><section class="card"><h2>Progress</h2><div class="muted">Weekly balance and long-term curriculum coverage are tracked separately.</div>
+<h3>This week</h3><div class="row" style="justify-content:space-between"><span>Overall</span><b id="pp">0%</b></div><div class="bar"><span id="pb" style="width:0%"></span></div><div id="breakdown" style="margin-top:10px"></div>
+<h3>Curriculum</h3><div class="row" style="justify-content:space-between"><span>Topics covered</span><b id="cp">0%</b></div><div class="bar"><span id="cb" style="width:0%"></span></div></section></div>
+</div>
+
+<script>
+(()=> {
+const S={energy:3,focus:new Set(),systems:[],long:[{id:1,name:"Renal",hours:3,done:0},{id:2,name:"Hematopathology",hours:2,done:0},{id:3,name:"GI",hours:2,done:0}],imm:[{id:4,name:"Renal tutorial",day:"Mon",done:false},{id:5,name:"Breast teaching",day:"Thu",done:false}],runs:[{id:6,name:"Easy run",mins:30,done:false},{id:7,name:"Long run",mins:90,done:false}],rest:[{id:8,name:"Friday evening off",day:"Fri",done:false}],tasks:[]};
+const $=id=>document.getElementById(id), esc=x=>String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function fmt(m){return m<60?m+"m":m%60?Math.floor(m/60)+"h "+m%60+"m":Math.floor(m/60)+"h"}
+function between(a,b){let A=a.split(":").map(Number),B=b.split(":").map(Number),x=A[0]*60+A[1],y=B[0]*60+B[1];if(y<=x)y+=1440;return y-x}
+let now=new Date();$("now").value=String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0");
+["Sat","Sun","Mon","Tue","Wed","Thu","Fri"].forEach((d,i)=>{let q=document.createElement("div");q.className="day"+(i===((now.getDay()+1)%7)?" today":"");q.innerHTML="<strong>"+d+"</strong>"+(i===((now.getDay()+1)%7)?"<span class='muted'>Today</span>":"");$("days").appendChild(q);$("weekDays").appendChild(q.cloneNode(true))});
+for(let i=1;i<=5;i++){let b=document.createElement("button");b.textContent=i;b.type="button";if(i===3)b.className="active";b.onclick=()=>{S.energy=i;document.querySelectorAll("#energy button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("energyText").textContent=i+" / 5"};$("energy").appendChild(b)}
+["Renal","Heme","GI","Gynae","Breast","MCQs"].forEach(x=>{let b=document.createElement("button");b.textContent=x;b.type="button";b.className="chip";b.onclick=()=>{if(S.focus.has(x)){S.focus.delete(x);b.classList.remove("active")}else{S.focus.add(x);b.classList.add("active")}};$("focus").appendChild(b)});
+
+function render(){
+const make=(arr,type)=>arr.map(g=>`<div class="item"><div class="row"><input type="checkbox" ${g.done?"checked":""} data-type="${type}" data-id="${g.id}"><div class="grow"><b>${esc(g.name)}</b><div class="meta">${type==="long"?g.done.toFixed(1)+" / "+g.hours+"h":type==="run"?g.mins+" min":g.day}</div>${type==="long"?`<div class="tiny"><span style="width:${Math.min(100,g.done/g.hours*100)}%"></span></div>`:""}</div></div></div>`).join("");
+$("longSide").innerHTML=make(S.long,"long");$("immSide").innerHTML=make(S.imm,"imm");$("runSide").innerHTML=make(S.runs,"run");$("restSide").innerHTML=make(S.rest,"rest");
+document.querySelectorAll("[data-type]").forEach(c=>c.onchange=()=>{let arr={long:S.long,imm:S.imm,run:S.runs,rest:S.rest}[c.dataset.type],g=arr.find(x=>x.id==c.dataset.id);g.done=c.checked?(c.dataset.type==="long"?g.hours:true):(c.dataset.type==="long"?0:false);render();updateProgress()});
+renderTree();updateProgress();
+}
+function updateProgress(){
+let lh=S.long.reduce((a,g)=>a+g.hours,0),ld=S.long.reduce((a,g)=>a+Math.min(g.done,g.hours),0),units=lh+S.imm.length+S.runs.length+S.rest.length,done=ld+S.imm.filter(x=>x.done).length+S.runs.filter(x=>x.done).length+S.rest.filter(x=>x.done).length,p=units?Math.round(done/units*100):0;
+$("wp").textContent=p+"%";$("wb").style.width=p+"%";$("wp2").textContent=p+"%";$("wb2").style.width=p+"%";$("pp").textContent=p+"%";$("pb").style.width=p+"%";
+$("breakdown").innerHTML=`<div class="item">Longitudinal <b style="float:right">${ld.toFixed(1)} / ${lh}h</b></div><div class="item">Immediate <b style="float:right">${S.imm.filter(x=>x.done).length} / ${S.imm.length}</b></div><div class="item">Running <b style="float:right">${S.runs.filter(x=>x.done).length} / ${S.runs.length}</b></div><div class="item">Rest / life <b style="float:right">${S.rest.filter(x=>x.done).length} / ${S.rest.length}</b></div>`;
+$("weekBreakdown").innerHTML=$("breakdown").innerHTML;
+let totalTopics=S.systems.reduce((a,s)=>a+s.topics.length,0),covered=S.systems.reduce((a,s)=>a+s.topics.filter(t=>t.done).length,0),cp=totalTopics?Math.round(covered/totalTopics*100):0;$("cp").textContent=cp+"%";$("cb").style.width=cp+"%";
+}
+function update(){let t=between($("now").value,$("sleep").value),r=+$("run").value,u=Math.max(0,t-r);$("until").textContent=fmt(t);$("usable").textContent=fmt(u);$("target").textContent=$("study").value+"h";$("left").textContent=S.long.reduce((a,g)=>a+Math.max(0,g.hours-g.done),0).toFixed(1)+"h"}
+["now","sleep","study","run"].forEach(id=>$(id).addEventListener("input",update));
+
+function build(){
+let req=+$("study").value*60,t=between($("now").value,$("sleep").value),run=+$("run").value,cap=Math.min(req,Math.max(0,t-run)),ctx=$("context").value.toLowerCase(),urgent=S.imm.filter(x=>!x.done),goals=S.long.filter(g=>g.done<g.hours).sort((a,b)=>a.done/a.hours-b.done/b.hours);
+if(S.focus.size){let g=goals.find(g=>[...S.focus].some(f=>g.name.toLowerCase().includes(f.toLowerCase())));if(g)goals=[g,...goals.filter(x=>x!==g)]}
+let immediate=urgent.length?(/tutorial|tomorrow|teaching|mdm/.test(ctx)?60:45):0;if(S.energy<=2)immediate=Math.min(immediate,45);let longitudinal=Math.max(0,cap-immediate),rows=[];
+if(run)rows.push({track:"RUN",name:"Run",mins:run,note:"Protected running commitment"});
+if(immediate)rows.push({track:"IMMEDIATE",name:urgent[0]?urgent[0].name:"Immediate learning",mins:Math.min(immediate,cap),note:"Prioritised because it is current / time-sensitive"});
+if(longitudinal&&goals.length){let g=goals[0],a=Math.min(45,longitudinal);rows.push({track:"LONGITUDINAL",name:"FRCPath — "+g.name,mins:a,note:"Pulled from remaining weekly target",gid:g.id});longitudinal-=a;if(longitudinal>=25)rows.push({track:"LONGITUDINAL",name:g.name+" — questions / recall",mins:Math.min(30,longitudinal),note:"Reinforce the same topic",gid:g.id})}
+if(longitudinal>=15)rows.push({track:"FLEX",name:"Catch-up / recall",mins:longitudinal,note:"Optional; only if you genuinely have the capacity"});
+S.tasks=rows;$("tasks").innerHTML=rows.length?rows.map((x,i)=>`<div class="task"><input type="checkbox" data-task="${i}"><div><div class="track">${x.track}</div><b>${esc(x.name)}</b><div class="meta">${esc(x.note)}</div></div><div>${x.mins}m</div></div>`).join(""):'<div class="muted" style="padding:14px 0">No study block fits. Protect the evening.</div>';
+document.querySelectorAll("[data-task]").forEach(c=>c.onchange=()=>{let x=S.tasks[+c.dataset.task];if(x.gid){let g=S.long.find(y=>y.id===x.gid);g.done=Math.min(g.hours,g.done+x.mins/60);render();update()}});
+$("summary").textContent=fmt(cap)+" planned · energy "+S.energy+"/5";$("state").textContent=cap<req?"COMPRESSED":"READY";$("warning").style.display=cap<req?"block":"none";$("warning").textContent="Requested study time does not fully fit before sleep after the run. Sleep is protected.";
+}
+$("plan").onclick=build;$("recalc").onclick=build;$("less").onclick=()=>{$("study").value=Math.max(.5,+$("study").value-.5);update();build()};$("more").onclick=()=>{$("study").value=Math.min(4,+$("study").value+.5);update();build()};
+
+function renderTree(){
+$("tree").innerHTML=S.systems.length?S.systems.map(s=>`<div class="system"><div class="systemhead"><b>${esc(s.name)}</b><span class="pill">${s.topics.filter(t=>t.done).length}/${s.topics.length}</span><button class="btn" data-addtopic="${s.id}">+ topic</button></div><div class="children">${s.topics.map(t=>`<div class="topic"><input type="checkbox" ${t.done?"checked":""} data-topic="${t.id}"> ${esc(t.name)}</div>`).join("")}</div></div>`).join(""):'<div class="muted" style="padding:14px 0">No systems yet. Add your first system below.</div>';
+document.querySelectorAll("[data-addtopic]").forEach(b=>b.onclick=()=>{let s=S.systems.find(x=>x.id==b.dataset.addtopic),n=prompt("Topic name");if(n&&n.trim()){s.topics.push({id:Date.now(),name:n.trim(),done:false});renderTree();updateProgress()}});
+document.querySelectorAll("[data-topic]").forEach(c=>c.onchange=()=>{let t=S.systems.flatMap(s=>s.topics).find(x=>x.id==c.dataset.topic);t.done=c.checked;renderTree();updateProgress()});
+}
+$("addSystem").onclick=()=>{let n=$("newSystem").value.trim();if(n){S.systems.push({id:Date.now(),name:n,topics:[]});$("newSystem").value="";renderTree();updateProgress()}};
+
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["today","week","curriculum","progress"].forEach(v=>$(v).classList.toggle("hidden",v!==b.dataset.view))});
+render();update();
+})();
+</script>
+</body></html>

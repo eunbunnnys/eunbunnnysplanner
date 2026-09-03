@@ -3,92 +3,497 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Adaptive Planner V4</title>
+<title>Adaptive Study Planner V7</title>
 <style>
-:root{--bg:#f7f6f3;--card:#fff;--ink:#292827;--muted:#77736d;--line:#dfddd7;--accent:#66796a;--soft:#e9eee9;--warm:#f1ede6}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.app{max-width:1250px;margin:auto;padding:20px}
-.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:25px;font-weight:750}.sub{font-size:12px;color:var(--muted);margin-top:3px}.nav{display:flex;gap:5px}.nav button,.btn{background:#fff;border:1px solid var(--line);border-radius:9px;padding:9px 12px;min-height:40px;cursor:pointer}.nav .active{background:var(--soft);border-color:var(--accent);font-weight:700}
-.layout{display:grid;grid-template-columns:390px 1fr;gap:17px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px}.card h2{font-size:17px;margin:0}.card h3{font-size:13px;margin:20px 0 8px}.muted{color:var(--muted);font-size:12px}.row{display:flex;gap:9px;align-items:center}.grow{flex:1}.bar{height:11px;background:#e8e6e1;border-radius:20px;overflow:hidden}.bar span{display:block;height:100%;background:var(--accent)}.pct{font-size:19px;font-weight:750}
-.item{padding:10px 0;border-top:1px solid #eee}.item b{font-size:13px}.meta{font-size:11px;color:var(--muted);margin-top:2px}.tiny{height:5px;background:#ebe9e5;border-radius:8px;overflow:hidden;margin-top:6px}.tiny span{display:block;height:100%;background:var(--accent)}
-input,select,textarea{width:100%;min-height:40px;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff;color:var(--ink);font-size:14px}textarea{min-height:72px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.add{display:grid;grid-template-columns:1fr 90px 42px;gap:5px}.primary{width:100%;min-height:44px;border:1px solid var(--accent);background:var(--accent);color:#fff;border-radius:9px;font-weight:700;cursor:pointer}
-.energy{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}.energy button{min-height:40px;background:#fff;border:1px solid var(--line);border-radius:8px}.energy button.active{background:var(--soft);border-color:var(--accent);font-weight:700}
-.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}.metric{background:var(--warm);padding:9px;border-radius:9px}.metric small{display:block;font-size:10px;color:var(--muted)}.metric strong{font-size:13px}
-.task{display:grid;grid-template-columns:20px 1fr auto;gap:9px;padding:12px 0;border-top:1px solid #eee}.track{font-size:10px;font-weight:800;letter-spacing:.08em;color:var(--muted)}.task b{font-size:13px}.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;margin:12px 0}.day{border:1px solid var(--line);border-radius:8px;padding:7px 2px;text-align:center;font-size:10px}.day strong{display:block;font-size:12px}.today{background:var(--soft);border-color:var(--accent)}
-.notice{background:var(--soft);padding:11px;border-radius:10px;font-size:12px;margin-top:11px}.hidden{display:none}.system{border:1px solid var(--line);border-radius:12px;margin:8px 0;overflow:hidden;background:#fff}.systemhead{display:flex;align-items:center;gap:9px;padding:11px}.systemhead b{flex:1}.weight{width:68px!important;min-height:34px!important;padding:5px 7px!important;font-size:12px!important}.children{padding:0 12px 10px 36px}.topic{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid #eee;font-size:12px}.topic input[type=checkbox],.item input[type=checkbox],.task input[type=checkbox]{appearance:none;-webkit-appearance:none;width:14px;height:14px;min-height:14px;padding:0;margin:0;border:1px solid #bdb9b1;border-radius:4px;background:#fff;cursor:pointer;flex:none}.topic input:checked,.item input:checked,.task input:checked{background:var(--accent);border-color:var(--accent);position:relative}.topic input:checked:after,.item input:checked:after,.task input:checked:after{content:"✓";color:#fff;font-size:10px;position:absolute;left:2px;top:-1px}
-.counter{display:flex;align-items:center;gap:10px;background:var(--warm);border-radius:12px;padding:12px;margin-top:9px}.counter strong{font-size:22px}.counter span{font-size:11px;color:var(--muted)}.sectionbox{border:1px solid var(--line);border-radius:12px;padding:13px;margin-top:10px}.sectionbox h4{margin:0 0 3px;font-size:13px}.pill{font-size:10px;background:var(--warm);padding:3px 7px;border-radius:20px;color:var(--muted)}.weekitem{padding:12px;border:1px solid var(--line);border-radius:10px;margin:7px 0}.weekitem b{font-size:13px}.remove{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:16px}.save{background:var(--soft);border:1px solid #cdd7ce;color:var(--ink);border-radius:9px;padding:9px 12px;font-weight:650;cursor:pointer}
-@media(max-width:900px){.layout{grid-template-columns:1fr}}@media(max-width:600px){.metrics,.two,.three{grid-template-columns:1fr 1fr}.days{grid-template-columns:repeat(4,1fr)}.app{padding:12px}}
+:root{
+ --bg:#f6f3ed;--panel:#fffdf8;--soft:#efebe3;--ink:#36322d;--muted:#827a70;
+ --line:#ddd6ca;--sage:#7d8c77;--sage2:#e4e9df;--clay:#a78b73;--white:#fff;
+ --danger:#9b6d67;--radius:16px;--shadow:0 8px 28px rgba(45,40,33,.065)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.45}
+button,input,select,textarea{font:inherit}
+button{border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 13px;border-radius:10px;cursor:pointer}
+button:hover{border-color:#b9b1a4}
+button.primary{background:var(--sage);color:#fff;border-color:var(--sage)}
+button.small{padding:6px 9px;font-size:12px}
+button.ghost{background:transparent}
+input,select,textarea{width:100%;border:1px solid var(--line);background:#fffefa;color:var(--ink);border-radius:10px;padding:9px 10px}
+textarea{min-height:72px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--sage);box-shadow:0 0 0 3px rgba(125,140,119,.12)}
+header{max-width:1240px;margin:auto;padding:28px 22px 18px}
+.brand{display:flex;align-items:flex-end;gap:10px}
+.brand h1{font-size:25px;letter-spacing:-.035em;margin:0;font-weight:760}
+.brand span{font-size:12px;color:var(--muted);padding-bottom:3px}
+nav{max-width:1240px;margin:auto;padding:0 22px 14px;display:flex;gap:5px;border-bottom:1px solid var(--line)}
+nav button{border:0;background:transparent;color:var(--muted);border-radius:9px}
+nav button.active{background:var(--panel);color:var(--ink);box-shadow:var(--shadow)}
+main{max-width:1240px;margin:auto;padding:20px 22px 50px}
+.view{display:none}.view.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1.05fr;gap:18px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px}
+.card h2,.card h3{margin:0 0 4px;letter-spacing:-.02em}
+.sub{color:var(--muted);font-size:12px}
+.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+.field{margin-top:12px}.field label{display:block;font-size:12px;font-weight:650;margin-bottom:5px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.four{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.progress{height:9px;background:#e5e0d7;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:var(--sage);border-radius:99px}
+.statline{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:7px 0 5px}
+.week-item{padding:12px 0;border-top:1px solid var(--line)}
+.week-item:first-child{border-top:0}
+.week-item b{font-size:13px}.week-item .meta{font-size:11px;color:var(--muted);margin-top:3px}
+.pill{display:inline-block;background:var(--sage2);color:#53604e;border-radius:999px;padding:3px 8px;font-size:11px}
+.notice{background:var(--sage2);border:1px solid #d5dccd;border-radius:12px;padding:11px 12px;font-size:12px;color:#4f5c4b}
+.warning{background:#f4e9e6;border:1px solid #e5d2ce;color:#76514c}
+.planrow{display:grid;grid-template-columns:88px 1fr;gap:12px;padding:11px 0;border-top:1px solid var(--line)}
+.planrow:first-child{border-top:0}.plantime{color:var(--muted);font-size:12px}.plantask{font-size:13px}
+.sys{border:1px solid var(--line);border-radius:14px;margin-top:10px;overflow:hidden;background:var(--panel)}
+.syshead{display:grid;grid-template-columns:1fr 70px 150px auto;gap:10px;align-items:center;padding:12px 13px;background:#faf8f2}
+.sysname{font-weight:700;font-size:13px}.weight input{padding:6px 7px;text-align:center;font-size:12px}
+.sysbody{padding:0 13px 7px}.topic{display:grid;grid-template-columns:22px 1fr 55px 36px;gap:8px;align-items:center;padding:8px 0;border-top:1px solid #eee9e0}
+.topic input[type=checkbox]{width:15px;height:15px;accent-color:var(--sage)}
+.topicname{font-size:12px}.topicpoints{font-size:11px;color:var(--muted);text-align:right}
+.addtopic{display:flex;gap:7px;padding:8px 0}.addtopic input{font-size:12px}
+.exam{padding:12px 0;border-top:1px solid var(--line)}
+.exam:first-child{border-top:0}.exam strong{font-size:13px}.days{font-size:12px;color:var(--clay);font-weight:700}
+.smallmuted{font-size:11px;color:var(--muted)}
+.table{width:100%;border-collapse:collapse;font-size:12px}.table th,.table td{padding:9px;border-bottom:1px solid var(--line);text-align:left}.table th{color:var(--muted);font-weight:650}
+footer{max-width:1240px;margin:auto;padding:0 22px 30px;color:var(--muted);font-size:11px;text-align:center}
+@media(max-width:850px){.grid2{grid-template-columns:1fr}.three,.four{grid-template-columns:1fr 1fr}.syshead{grid-template-columns:1fr 60px}.syshead .sysbar{grid-column:1/-1}.topic{grid-template-columns:22px 1fr 50px 32px}}
 </style>
 </head>
-<body><div class="app">
-<header class="top"><div><div class="brand">Adaptive Planner</div><div class="sub">V4 · curriculum → suggested Friday framework → adaptive day</div></div>
-<nav class="nav"><button class="active" data-view="today">Today</button><button data-view="week">Week</button><button data-view="curriculum">Curriculum</button><button data-view="progress">Progress</button></nav></header>
+<body>
+<header>
+  <div class="brand"><h1>Adaptive Study Planner</h1><span>V7</span><span id="saveStatus">Autosave on</span></div>
+  <div class="sub" style="margin-top:5px">A flexible planner that decides what is worth doing with the time you actually have.</div>
+</header>
+<nav>
+  <button class="active" data-view="today">Today</button>
+  <button data-view="week">Week</button>
+  <button data-view="curriculum">Curriculum</button>
+</nav>
 
-<section id="today" class="layout">
-<aside class="card"><h2>This week</h2><div class="muted">Finalised Friday framework becomes tonight's available choices.</div>
-<div style="margin-top:12px"><div class="row" style="justify-content:space-between"><span class="muted">Week balance</span><b class="pct" id="wp">0%</b></div><div class="bar"><span id="wb" style="width:0%"></span></div></div>
-<div class="days" id="days"></div><h3>Longitudinal</h3><div id="longSide"></div><h3>Immediate</h3><div id="immSide"></div><h3>Running</h3><div id="runSide"></div><h3>Rest / life</h3><div id="restSide"></div></aside>
 <main>
-<section class="card"><h2>Tonight's check-in</h2><div class="muted">You choose capacity. The system plans the work unless you specify a focus.</div>
-<div class="two" style="margin-top:12px"><div><div class="muted">Current time</div><input id="now" type="time"></div><div><div class="muted">Planned sleep</div><input id="sleep" type="time" value="23:30"></div><div><div class="muted">Study commitment</div><select id="study"><option>.5</option><option>1</option><option selected>1.5</option><option>2</option><option>2.5</option><option>3</option><option>3.5</option><option>4</option></select></div><div><div class="muted">Run tonight</div><select id="run"><option value="0">None</option><option value="20">20 min</option><option value="30" selected>30 min</option><option value="45">45 min</option><option value="60">60 min</option><option value="75">75 min</option><option value="90">90 min</option></select></div></div>
-<div style="margin-top:12px"><div class="muted">Energy · <span id="energyText">3 / 5</span></div><div class="energy" id="energy"></div></div>
-<div style="margin-top:12px"><div class="muted">What do you want to focus on tonight? <span class="meta">optional</span></div><select id="focusSelect" style="margin-top:5px"><option value="">No preference — let the system plan</option></select></div>
-<div style="margin-top:12px"><div class="muted">Other comments / tweaks</div><textarea id="context" placeholder="e.g. I'm exhausted; tutorial tomorrow is more urgent; I can do MCQs but not reading"></textarea></div>
-<div class="metrics"><div class="metric"><small>Until sleep</small><strong id="until">—</strong></div><div class="metric"><small>After run</small><strong id="usable">—</strong></div><div class="metric"><small>Study target</small><strong id="target">1.5h</strong></div><div class="metric"><small>Longitudinal left</small><strong id="left">—</strong></div></div>
-<button class="primary" id="plan" style="margin-top:11px">Plan my evening</button></section>
-<section class="card" style="margin-top:14px"><div class="row" style="justify-content:space-between"><div><h2>Tonight's plan</h2><div class="muted" id="summary">Waiting for check-in.</div></div><b id="state" style="font-size:11px;color:var(--accent)">READY</b></div><div id="tasks"><div class="muted" style="padding:14px 0">Your generated plan will appear here.</div></div>
-<div style="display:flex;gap:6px"><button class="btn" id="less">Less time</button><button class="btn" id="more">More time</button><button class="btn" id="recalc">Recalculate</button></div><div class="notice" id="warning" style="display:none"></div></section>
-</main></section>
+<section id="today" class="view active">
+  <div class="grid2">
+    <div>
+      <div class="card">
+        <h2>This week</h2><div class="sub">Your weekly contract. The day-to-day route stays flexible.</div>
+        <div id="weekSummary" style="margin-top:12px"></div>
+      </div>
+      <div class="card" style="margin-top:18px">
+        <h3>Data safety</h3><div class="sub">Everything saves in this browser automatically.</div>
+        <div class="row" style="margin-top:10px">
+          <button id="exportBtn" class="small">Export backup</button>
+          <button id="importBtn" class="small">Import backup</button>
+          <button id="clearBtn" class="small ghost">Clear saved data</button>
+          <input id="importFile" type="file" accept=".json,application/json" style="display:none">
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Plan my evening</h2><div class="sub">Tell the planner your actual capacity. It chooses the work.</div>
+      <div class="three">
+        <div class="field"><label>Current time</label><input id="nowTime" type="time"></div>
+        <div class="field"><label>Sleep time</label><input id="sleepTime" type="time" value="23:00"></div>
+        <div class="field"><label>Study commitment</label><input id="studyHours" type="number" min="0" max="8" step=".5" value="1.5"></div>
+      </div>
+      <div class="four">
+        <div class="field"><label>Energy (1–5)</label><select id="energy"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+        <div class="field"><label>Run tonight?</label><select id="runTonight"><option value="no">No</option><option value="yes">Yes</option></select></div>
+        <div class="field"><label>Run time</label><input id="runHours" type="number" min="0" max="3" step=".5" value="0.5"></div>
+        <div class="field"><label>Focus</label><select id="focus"><option value="">No preference — system plans</option></select></div>
+      </div>
+      <div class="field"><label>Context / tweaks</label><textarea id="context" placeholder="e.g. terrible day; presentation tomorrow; I can only manage something light"></textarea></div>
+      <div class="row" style="margin-top:12px">
+        <button id="planBtn" class="primary">Plan my evening</button>
+        <button id="lessBtn">Less time</button><button id="moreBtn">More time</button>
+      </div>
+      <div id="planOutput" style="margin-top:16px"></div>
+    </div>
+  </div>
+</section>
 
-<section id="week" class="hidden"><section class="card"><div class="row" style="justify-content:space-between"><div><h2>Suggested weekly framework</h2><div class="muted">Generated for your Friday evening planning session. Edit before finalising.</div></div><button class="save" id="finalise">Finalise week</button></div>
-<div class="days" id="weekDays"></div><div class="row" style="justify-content:space-between"><span class="muted">Weekly balance</span><b class="pct" id="wp2">0%</b></div><div class="bar"><span id="wb2" style="width:0%"></span></div>
-<div class="sectionbox"><h4>Longitudinal</h4><div class="muted">Pulled from the overarching pathology curriculum + exam goals.</div><div id="weekLong"></div></div>
-<div class="sectionbox"><h4>Immediate</h4><div class="muted">Your events / things to settle this week.</div><div id="weekImm"></div>
-<div class="three" style="margin-top:8px"><select id="immType"><option>Tutorial</option><option>MDM</option><option>Presentation</option><option>Teaching</option><option>Deadline</option><option>Other</option></select><input id="immTopic" placeholder="Topic / thing to settle"><button class="btn" id="addImm">Add</button></div></div>
-<div class="sectionbox"><h4>Running</h4><div class="muted">Flexible days — only total minutes and number of days are planned.</div><div class="three" style="margin-top:8px"><input id="runMins" type="number" min="0" step="5" value="90"><input id="runDays" type="number" min="1" max="7" value="3"><button class="btn" id="setRun">Set running</button></div><div id="weekRun"></div></div>
-<div class="sectionbox"><h4>Rest / life</h4><div class="muted">Flexible timing — plan the amount of protected recovery/life time, not exact days.</div><div class="three" style="margin-top:8px"><input id="restMins" type="number" min="0" step="15" value="120"><input id="restLabel" placeholder="e.g. Friday off"><button class="btn" id="setRest">Add</button></div><div id="weekRest"></div></div>
-<div class="notice">Once finalised, this framework becomes the left-hand contract on Today. The daily planner chooses when to execute it.</div></section></section>
+<section id="week" class="view">
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><h2>Weekly framework</h2><div class="sub">Build this on Friday. Targets are flexible, not fixed appointments.</div></div>
+      <div class="pill" id="weekDates"></div>
+    </div>
+    <div id="weekProgress" style="margin-top:14px"></div>
+    <div class="grid2" style="margin-top:18px">
+      <div>
+        <div class="card" style="box-shadow:none;background:var(--soft)">
+          <h3>Longitudinal</h3><div class="sub">Suggested from curriculum weight + remaining topics + recency.</div>
+          <div class="field"><label>Total longitudinal study target (h)</label><input id="weeklyLongHours" type="number" min="0" max="50" step=".5" value="7"></div>
+          <button id="suggestWeek" class="primary" style="margin-top:10px">Suggest weekly framework</button>
+          <div id="longSuggestions" style="margin-top:10px"></div>
+        </div>
+        <div class="card" style="box-shadow:none;background:var(--soft);margin-top:12px">
+          <h3>Immediate</h3><div class="sub">Add things that genuinely need doing this week.</div>
+          <div class="three">
+            <div class="field"><label>Type</label><select id="immType"><option>Tutorial</option><option>MDM</option><option>Presentation</option><option>Teaching</option><option>Deadline</option><option>Other</option></select></div>
+            <div class="field" style="grid-column:span 2"><label>Topic / task</label><input id="immTopic" placeholder="e.g. gynae tutorial"></div>
+          </div>
+          <button id="addImmediate" class="small" style="margin-top:9px">Add</button>
+          <div id="immediateList"></div>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="box-shadow:none;background:var(--soft)">
+          <h3>Running</h3>
+          <div class="three">
+            <div class="field"><label>Total running (h)</label><input id="runWeeklyHours" type="number" min="0" step=".5" value="3"></div>
+            <div class="field"><label>Days/week</label><input id="runDays" type="number" min="0" max="7" step="1" value="3"></div>
+          </div>
+        </div>
+        <div class="card" style="box-shadow:none;background:var(--soft);margin-top:12px">
+          <h3>Rest / life</h3>
+          <div class="field"><label>Total allocation (h)</label><input id="lifeHours" type="number" min="0" step=".5" value="4"></div>
+          <div class="field"><label>Label</label><input id="lifeLabel" value="Rest / life"></div>
+        </div>
+        <div class="card" style="box-shadow:none;background:var(--soft);margin-top:12px">
+          <h3>Week status</h3>
+          <div id="finalStatus" class="sub">Not finalised yet.</div>
+          <button id="finaliseBtn" class="primary" style="margin-top:10px">Finalise week</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<section id="curriculum" class="hidden"><section class="card"><h2>Curriculum</h2><div class="muted">Your master pathology syllabus is longitudinal and not exam-specific.</div>
-<div class="sectionbox"><h4>Master pathology curriculum</h4><div class="muted">Weight applies to the umbrella system, not individual topics.</div><div id="tree"></div>
-<div class="add" style="margin-top:10px"><input id="newSystem" placeholder="Add system / umbrella category"><span></span><button class="btn" id="addSystem">+</button></div></div>
-<div class="sectionbox"><h4>Long-term exams</h4><div class="muted">Enter an exam and date. The counter feeds the long-term planning engine.</div><div id="exams"></div>
-<div class="three" style="margin-top:8px"><input id="examName" placeholder="Exam name"><input id="examDate" type="date"><button class="btn" id="addExam">Add exam</button></div></div>
-<div class="sectionbox"><h4>General studying</h4><div class="muted">Ongoing things independent of a specific exam.</div><div id="general"></div>
-<div class="three" style="margin-top:8px"><input id="generalName" placeholder="e.g. Path library / Blackbox practice"><input id="generalMins" type="number" min="15" step="15" placeholder="min/week"><button class="btn" id="addGeneral">Add</button></div></div>
-<div class="sectionbox"><h4>Exam-specific study activities</h4><div class="muted">Examples: MCQ practice, flashcards, past papers.</div><div id="activities"></div>
-<div class="three" style="margin-top:8px"><select id="activityExam"><option value="">Choose exam</option></select><input id="activityName" placeholder="e.g. MCQ practice"><input id="activityMins" type="number" min="15" step="15" placeholder="min/week"></div><button class="btn" id="addActivity" style="margin-top:6px">Add activity</button></div>
-</section></section>
+<section id="curriculum" class="view">
+  <div class="card">
+    <div class="row" style="justify-content:space-between">
+      <div><h2>Pathology curriculum</h2><div class="sub">Base curriculum from your reference list. Edit it directly here.</div></div>
+      <button id="addSystem" class="small">+ Add system</button>
+    </div>
+    <div style="margin-top:14px">
+      <div class="statline"><span id="currMeta">0 / 0 topics</span><b id="currPct">0%</b></div>
+      <div class="progress"><i id="currBar"></i></div>
+    </div>
+    <div id="systems" style="margin-top:16px"></div>
+  </div>
+  <div class="grid2" style="margin-top:18px">
+    <div class="card">
+      <h2>Exams</h2><div class="sub">Long-term deadlines that influence longitudinal priority.</div>
+      <div class="field"><label>Exam name</label><input id="examName" placeholder="e.g. FRCPath Part 1"></div>
+      <div class="field"><label>Exam date</label><input id="examDate" type="date"></div>
+      <button id="addExam" class="small" style="margin-top:9px">Add exam</button>
+      <div id="exams" style="margin-top:10px"></div>
+    </div>
+    <div class="card">
+      <h2>Study activities</h2><div class="sub">Useful work that isn't itself a curriculum topic.</div>
+      <div class="field"><label>General study activity</label><input id="generalName" placeholder="e.g. Path Library / Black Box"></div>
+      <div class="field"><label>Weekly target (h)</label><input id="generalHours" type="number" min="0" step=".5" value="1"></div>
+      <button id="addGeneral" class="small" style="margin-top:9px">Add general study</button>
+      <div id="generalList" style="margin-top:10px"></div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+      <div class="field"><label>Exam-specific activity</label><input id="examStudyName" placeholder="e.g. MCQs"></div>
+      <div class="field"><label>Exam</label><select id="examStudyExam"></select></div>
+      <div class="field"><label>Weekly target (h)</label><input id="examStudyHours" type="number" min="0" step=".5" value="1"></div>
+      <button id="addExamStudy" class="small" style="margin-top:9px">Add exam study</button>
+      <div id="examStudyList" style="margin-top:10px"></div>
+    </div>
+  </div>
+</section>
+</main>
+<footer>Adaptive Study Planner V7 · data is stored locally in this browser</footer>
 
-<section id="progress" class="hidden"><section class="card"><h2>Progress</h2><div class="muted">Weekly balance and long-term curriculum coverage are tracked separately.</div><h3>This week</h3><div class="row" style="justify-content:space-between"><span>Overall</span><b id="pp">0%</b></div><div class="bar"><span id="pb" style="width:0%"></span></div><div id="breakdown" style="margin-top:10px"></div><h3>Curriculum</h3><div class="row" style="justify-content:space-between"><span>Topic coverage</span><b id="cp">0%</b></div><div class="bar"><span id="cb" style="width:0%"></span></div></section></section>
-</div>
 <script>
-(()=> {
-const S={systems:[],exams:[],general:[],activities:[],long:[{id:1,name:"Renal",hours:3,done:0},{id:2,name:"Hematopathology",hours:2,done:0},{id:3,name:"GI",hours:2,done:0}],imm:[],runs:[{id:1,name:"Running",mins:90,days:3,done:false}],rest:[{id:2,name:"Protected rest / life",mins:120,done:false}],tasks:[],energy:3};
-const $=id=>document.getElementById(id),esc=x=>String(x).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
-function fmt(m){return m<60?m+"m":m%60?Math.floor(m/60)+"h "+m%60+"m":Math.floor(m/60)+"h"}function between(a,b){let A=a.split(":").map(Number),B=b.split(":").map(Number),x=A[0]*60+A[1],y=B[0]*60+B[1];if(y<=x)y+=1440;return y-x}
-let d=new Date();$("now").value=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
-["Sat","Sun","Mon","Tue","Wed","Thu","Fri"].forEach((x,i)=>{let q=document.createElement("div");q.className="day"+(i===((d.getDay()+1)%7)?" today":"");q.innerHTML="<strong>"+x+"</strong>"+(i===((d.getDay()+1)%7)?"<span class='muted'>Today</span>":"");$("days").appendChild(q);$("weekDays").appendChild(q.cloneNode(true))});
-for(let i=1;i<=5;i++){let b=document.createElement("button");b.textContent=i;b.type="button";if(i===3)b.className="active";b.onclick=()=>{S.energy=i;document.querySelectorAll("#energy button").forEach(x=>x.classList.remove("active"));b.classList.add("active");$("energyText").textContent=i+" / 5"};$("energy").appendChild(b)}
-function progress(){let lh=S.long.reduce((a,g)=>a+g.hours,0),ld=S.long.reduce((a,g)=>a+Math.min(g.done,g.hours),0),units=lh+S.imm.length+S.runs.length+S.rest.length,done=ld+S.imm.filter(x=>x.done).length+S.runs.filter(x=>x.done).length+S.rest.filter(x=>x.done).length,p=units?Math.round(done/units*100):0;$("wp").textContent=p+"%";$("wb").style.width=p+"%";$("wp2").textContent=p+"%";$("wb2").style.width=p+"%";$("pp").textContent=p+"%";$("pb").style.width=p+"%";$("breakdown").innerHTML=`<div class="item">Longitudinal <b style="float:right">${ld.toFixed(1)} / ${lh}h</b></div><div class="item">Immediate <b style="float:right">${S.imm.filter(x=>x.done).length} / ${S.imm.length}</b></div><div class="item">Running <b style="float:right">${S.runs.filter(x=>x.done).length} / ${S.runs.length}</b></div><div class="item">Rest / life <b style="float:right">${S.rest.filter(x=>x.done).length} / ${S.rest.length}</b></div>`;let tt=S.systems.reduce((a,s)=>a+s.topics.length,0),tc=S.systems.reduce((a,s)=>a+s.topics.filter(t=>t.done).length,0),cp=tt?Math.round(tc/tt*100):0;$("cp").textContent=cp+"%";$("cb").style.width=cp+"%"}
-function renderSide(){const mk=(arr,type)=>arr.map(g=>`<div class="item"><div class="row"><input type="checkbox" ${g.done?"checked":""} data-k="${type}" data-id="${g.id}"><div class="grow"><b>${esc(g.name)}</b><div class="meta">${type==="long"?g.done.toFixed(1)+" / "+g.hours+"h":type==="run"?g.mins+" min · "+g.days+" days":type==="rest"?g.mins+" min":(g.type||"")+" "+(g.topic||"")}</div>${type==="long"?`<div class="tiny"><span style="width:${Math.min(100,g.done/g.hours*100)}%"></span></div>`:""}</div></div></div>`).join("");$("longSide").innerHTML=mk(S.long,"long");$("immSide").innerHTML=mk(S.imm,"imm");$("runSide").innerHTML=mk(S.runs,"run");$("restSide").innerHTML=mk(S.rest,"rest");document.querySelectorAll("[data-k]").forEach(c=>c.onchange=()=>{let a={long:S.long,imm:S.imm,run:S.runs,rest:S.rest}[c.dataset.k],g=a.find(x=>x.id==c.dataset.id);g.done=c.checked?(c.dataset.k==="long"?g.hours:true):(c.dataset.k==="long"?0:false);renderSide();progress();renderWeek()})}
-function renderTree(){ $("tree").innerHTML=S.systems.length?S.systems.map(s=>`<div class="system"><div class="systemhead"><b>${esc(s.name)}</b><span class="pill">${s.topics.filter(t=>t.done).length}/${s.topics.length}</span><label class="muted">weight <input class="weight" type="number" min="1" max="10" value="${s.weight}" data-weight="${s.id}"></label><button class="btn" data-add="${s.id}">+ topic</button></div><div class="children">${s.topics.map(t=>`<div class="topic"><input type="checkbox" ${t.done?"checked":""} data-topic="${t.id}"><span class="grow">${esc(t.name)}</span><button class="remove" data-del="${t.id}">×</button></div>`).join("")}<div class="topic"><input id="inline-${s.id}" placeholder="Type topic, then Enter" onkeydown="if(event.key==='Enter'){event.preventDefault();document.querySelector('[data-inline-add=&quot;${s.id}&quot;]').click()}"><button class="btn" data-inline-add="${s.id}">Add</button></div></div></div>`).join(""):'<div class="muted" style="padding:12px 0">No systems yet. Add your first umbrella system below.</div>';document.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>{let s=S.systems.find(x=>x.id==b.dataset.add),n=prompt("Topic name");if(n&&n.trim()){s.topics.push({id:Date.now(),name:n.trim(),done:false});renderTree();progress()}});document.querySelectorAll("[data-inline-add]").forEach(b=>b.onclick=()=>{let s=S.systems.find(x=>x.id==b.dataset.inlineAdd),i=$("inline-"+s.id),n=i.value.trim();if(n){s.topics.push({id:Date.now(),name:n,done:false});i.value="";renderTree();progress();$("inline-"+s.id)?.focus()}});document.querySelectorAll("[data-topic]").forEach(c=>c.onchange=()=>{let t=S.systems.flatMap(s=>s.topics).find(x=>x.id==c.dataset.topic);t.done=c.checked;renderTree();progress()});document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{S.systems.forEach(s=>s.topics=s.topics.filter(t=>t.id!=b.dataset.del));renderTree();progress()});document.querySelectorAll("[data-weight]").forEach(i=>i.onchange=()=>{S.systems.find(s=>s.id==i.dataset.weight).weight=Math.max(1,+i.value||1)})}
-$("addSystem").onclick=()=>{let n=$("newSystem").value.trim();if(n){S.systems.push({id:Date.now(),name:n,weight:3,topics:[]});$("newSystem").value="";renderTree();progress()}};
-function renderExams(){let o='<option value="">Choose exam</option>';S.exams.forEach(e=>o+=`<option value="${e.id}">${esc(e.name)}</option>`);$("activityExam").innerHTML=o;$("exams").innerHTML=S.exams.length?S.exams.map(e=>{let days=e.date?Math.max(0,Math.ceil((new Date(e.date+"T00:00:00")-new Date())/86400000)):null;return`<div class="item"><div class="row"><div class="grow"><b>${esc(e.name)}</b><div class="meta">${e.date||"No date set"}</div>${days!==null?`<div class="counter"><strong>${days}</strong><span>days until exam</span></div>`:""}</div><button class="remove" data-examdel="${e.id}">×</button></div></div>`}).join(""):'<div class="muted" style="padding:10px 0">No exams added yet.</div>';document.querySelectorAll("[data-examdel]").forEach(b=>b.onclick=()=>{S.exams=S.exams.filter(e=>e.id!=b.dataset.examdel);renderExams();renderActivities()})}
-$("addExam").onclick=()=>{let n=$("examName").value.trim(),date=$("examDate").value;if(n){S.exams.push({id:Date.now(),name:n,date});$("examName").value="";$("examDate").value="";renderExams();renderActivities()}};
-function renderGeneral(){$("general").innerHTML=S.general.length?S.general.map(g=>`<div class="item"><div class="row"><div class="grow"><b>${esc(g.name)}</b><div class="meta">${g.mins} min/week</div></div><button class="remove" data-g="${g.id}">×</button></div></div>`).join(""):'<div class="muted" style="padding:8px 0">Nothing added yet.</div>';document.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{S.general=S.general.filter(x=>x.id!=b.dataset.g);renderGeneral()})}
-$("addGeneral").onclick=()=>{let n=$("generalName").value.trim(),m=+$("generalMins").value||60;if(n){S.general.push({id:Date.now(),name:n,mins:m});$("generalName").value="";$("generalMins").value="";renderGeneral()}};
-function renderActivities(){$("activities").innerHTML=S.activities.length?S.activities.map(a=>{let e=S.exams.find(x=>x.id==a.exam);return`<div class="item"><div class="row"><div class="grow"><b>${esc(a.name)}</b><div class="meta">${e?esc(e.name):"Exam"} · ${a.mins} min/week</div></div><button class="remove" data-a="${a.id}">×</button></div></div>`}).join(""):'<div class="muted" style="padding:8px 0">Nothing added yet.</div>';document.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{S.activities=S.activities.filter(x=>x.id!=b.dataset.a);renderActivities()})}
-$("addActivity").onclick=()=>{let e=+$("activityExam").value,n=$("activityName").value.trim(),m=+$("activityMins").value||60;if(e&&n){S.activities.push({id:Date.now(),exam:e,name:n,mins:m});$("activityName").value="";$("activityMins").value="";renderActivities()}};
-function renderFocus(){let o='<option value="">No preference — let the system plan</option>';S.long.forEach(g=>o+=`<option value="long-${g.id}">${esc(g.name)} · longitudinal</option>`);S.imm.forEach(g=>o+=`<option value="imm-${g.id}">${esc(g.name)} · immediate</option>`);S.general.forEach(g=>o+=`<option value="gen-${g.id}">${esc(g.name)} · general</option>`);S.activities.forEach(g=>o+=`<option value="act-${g.id}">${esc(g.name)} · exam activity</option>`);$("focusSelect").innerHTML=o}
-function renderWeek(){renderFocus();$("weekLong").innerHTML=S.long.map(g=>`<div class="weekitem"><div class="row"><div class="grow"><b>${esc(g.name)}</b><div class="meta">${g.hours}h target · ${g.done.toFixed(1)}h completed</div></div><input type="number" min=".5" step=".5" value="${g.hours}" style="width:75px" data-wh="${g.id}"><button class="remove" data-wdel="${g.id}">×</button></div></div>`).join("");$("weekImm").querySelectorAll("[data-x]");$("weekImm").innerHTML=S.imm.length?S.imm.map(g=>`<div class="weekitem"><div class="row"><div class="grow"><b>${esc(g.type||"Other")}</b><div class="meta">${esc(g.topic||g.name)}</div></div><button class="remove" data-idel="${g.id}">×</button></div></div>`).join(""):'<div class="muted" style="padding:8px 0">No immediate items yet.</div>';$("weekRun").innerHTML=S.runs.map(g=>`<div class="weekitem"><div class="row"><div class="grow"><b>Running</b><div class="meta">${g.mins} total minutes · ${g.days} days/week · flexible days</div></div></div></div>`).join("");$("weekRest").innerHTML=S.rest.map(g=>`<div class="weekitem"><div class="row"><div class="grow"><b>${esc(g.name)}</b><div class="meta">${g.mins} min/week · flexible timing</div></div></div></div>`).join("");document.querySelectorAll("[data-wh]").forEach(i=>i.onchange=()=>{let g=S.long.find(x=>x.id==i.dataset.wh);g.hours=Math.max(.5,+i.value||.5);progress();renderWeek();renderSide()});document.querySelectorAll("[data-wdel]").forEach(b=>b.onclick=()=>{S.long=S.long.filter(x=>x.id!=b.dataset.wdel);renderWeek();renderSide();renderFocus()});document.querySelectorAll("[data-idel]").forEach(b=>b.onclick=()=>{S.imm=S.imm.filter(x=>x.id!=b.dataset.idel);renderWeek();renderSide();renderFocus()})}
-$("addImm").onclick=()=>{let type=$("immType").value,topic=$("immTopic").value.trim();if(topic){S.imm.push({id:Date.now(),type,topic,name:type+" — "+topic,done:false});$("immTopic").value="";renderWeek();renderSide();renderFocus();progress()}};
-$("setRun").onclick=()=>{S.runs=[{id:1,name:"Running",mins:Math.max(0,+$("runMins").value||0),days:Math.max(1,Math.min(7,+$("runDays").value||1)),done:false}];renderWeek();renderSide();progress()};
-$("setRest").onclick=()=>{let m=Math.max(0,+$("restMins").value||0),n=$("restLabel").value.trim()||"Protected rest / life";S.rest=[{id:2,name:n,mins:m,done:false}];$("restLabel").value="";renderWeek();renderSide();progress()};
-$("finalise").onclick=()=>alert("Weekly framework finalised. Its items now drive the Today tab.");
-function build(){let req=+$("study").value*60,t=between($("now").value,$("sleep").value),run=+$("run").value,cap=Math.min(req,Math.max(0,t-run)),focus=$("focusSelect").value,ctx=$("context").value.toLowerCase(),urgent=S.imm.filter(x=>!x.done),goals=S.long.filter(g=>g.done<g.hours).sort((a,b)=>a.done/a.hours-b.done/b.hours);if(focus){let [type,id]=focus.split("-");if(type==="long"){let g=S.long.find(x=>x.id==id);if(g)goals=[g,...goals.filter(x=>x!==g)]}if(type==="imm"){let g=S.imm.find(x=>x.id==id);if(g)urgent=[g,...urgent.filter(x=>x!==g)]}}let im=urgent.length?(/tomorrow|tutorial|mdm|teaching|deadline|prepare/.test(ctx)?60:45):0;if(S.energy<=2)im=Math.min(im,45);if(focus.startsWith("imm-"))im=Math.min(60,cap);let lm=Math.max(0,cap-im),rows=[];if(run)rows.push({track:"RUN",name:"Run",mins:run,note:"Protected running commitment"});if(im&&urgent.length)rows.push({track:"IMMEDIATE",name:urgent[0].name,mins:Math.min(im,cap),note:"Current-week item; prioritised for tonight"});if(lm&&goals.length){let g=goals[0],a=Math.min(45,lm);rows.push({track:"LONGITUDINAL",name:g.name,mins:a,note:"Pulled from remaining weekly longitudinal workload",gid:g.id});lm-=a;if(lm>=25)rows.push({track:"LONGITUDINAL",name:g.name+" — questions / recall",mins:Math.min(30,lm),note:"Reinforcement block",gid:g.id})}let extra=S.activities.concat(S.general);if(lm>=20&&extra.length)rows.push({track:"GENERAL / EXAM",name:extra[0].name,mins:Math.min(30,lm),note:"Secondary activity from your curriculum settings"});if(lm>=15)rows.push({track:"FLEX",name:"Catch-up / recall",mins:lm,note:"Optional; not a requirement"});S.tasks=rows;$("tasks").innerHTML=rows.length?rows.map((x,i)=>`<div class="task"><input type="checkbox" data-task="${i}"><div><div class="track">${x.track}</div><b>${esc(x.name)}</b><div class="meta">${esc(x.note)}</div></div><div>${x.mins}m</div></div>`).join(""):'<div class="muted" style="padding:14px 0">No useful block fits. Protect the evening.</div>';document.querySelectorAll("[data-task]").forEach(c=>c.onchange=()=>{let x=S.tasks[+c.dataset.task];if(x.gid){let g=S.long.find(y=>y.id===x.gid);g.done=Math.min(g.hours,g.done+x.mins/60);renderSide();renderWeek();progress();update()}});$("summary").textContent=fmt(cap)+" planned · energy "+S.energy+"/5"+(focus?" · focus selected":"");$("state").textContent=cap<req?"COMPRESSED":"READY";$("warning").style.display=cap<req?"block":"none";$("warning").textContent="Requested study time does not fully fit before sleep after the run. Sleep is protected."}
-$("plan").onclick=build;$("recalc").onclick=build;$("less").onclick=()=>{$("study").value=Math.max(.5,+$("study").value-.5);update();build()};$("more").onclick=()=>{$("study").value=Math.min(4,+$("study").value+.5);update();build()};
-function update(){let t=between($("now").value,$("sleep").value),r=+$("run").value;$("until").textContent=fmt(t);$("usable").textContent=fmt(Math.max(0,t-r));$("target").textContent=$("study").value+"h";$("left").textContent=S.long.reduce((a,g)=>a+Math.max(0,g.hours-g.done),0).toFixed(1)+"h"}
-document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>{document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");["today","week","curriculum","progress"].forEach(v=>$(v).classList.toggle("hidden",v!==b.dataset.view));if(b.dataset.view==="week")renderWeek();if(b.dataset.view==="curriculum"){renderTree();renderExams();renderGeneral();renderActivities()}});
-renderSide();renderTree();renderExams();renderGeneral();renderActivities();renderWeek();progress();update();
-})();
-</script></body></html>
+const SEED = [{"id": "sys_1", "name": "Dermatopathology & musculoskeletal", "weight": 7.75, "topics": [{"id": "t_1_1", "name": "Non-neoplastic diseases of skin", "points": 1, "done": false, "lastStudied": null}, {"id": "t_1_2", "name": "Neoplastic dermatopathology", "points": 1, "done": false, "lastStudied": null}, {"id": "t_1_3", "name": "Muscle biopsy and pathology", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_1_4", "name": "Nerve biopsy and pathology", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_1_5", "name": "Soft tissue tumours and diseases", "points": 4, "done": false, "lastStudied": null}, {"id": "t_1_6", "name": "Joint diseases", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_1_7", "name": "Non-neoplastic diseases of bone and bone tumour", "points": 1, "done": false, "lastStudied": null}]}, {"id": "sys_2", "name": "Breast", "weight": 1, "topics": [{"id": "t_2_1", "name": "Breast pathology", "points": 1, "done": false, "lastStudied": null}]}, {"id": "sys_3", "name": "Central nervous system", "weight": 1, "topics": [{"id": "t_3_1", "name": "Brain, spinal cord and meninges", "points": 1, "done": false, "lastStudied": null}]}, {"id": "sys_4", "name": "Endocrine", "weight": 2.5, "topics": [{"id": "t_4_1", "name": "Neuroendocrine and paracrine system", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_4_2", "name": "Pituitary and Sellar region", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_4_3", "name": "Thyroid and parathyroid", "points": 1, "done": false, "lastStudied": null}, {"id": "t_4_4", "name": "Adrenal glands & paraganglioma", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_5", "name": "Hematolymphoid", "weight": 4.75, "topics": [{"id": "t_5_1", "name": "Disorders of bone marrow", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_5_2", "name": "Lymph nodes", "points": 4, "done": false, "lastStudied": null}, {"id": "t_5_3", "name": "Spleen", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_6", "name": "Head & neck", "weight": 3.5, "topics": [{"id": "t_6_1", "name": "The jaw and oral cavity", "points": 0.75, "done": false, "lastStudied": null}, {"id": "t_6_2", "name": "Salivary glands", "points": 1, "done": false, "lastStudied": null}, {"id": "t_6_3", "name": "The nose, paranasal sinuses and nasopharynx", "points": 1, "done": false, "lastStudied": null}, {"id": "t_6_4", "name": "Larynx", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_6_5", "name": "Ear", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_6_6", "name": "Eye and Ocular adnexa", "points": 0.25, "done": false, "lastStudied": null}]}, {"id": "sys_7", "name": "Respiratory & mediastinum", "weight": 2.75, "topics": [{"id": "t_7_1", "name": "Nonneoplastic pulmonary disease", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_7_2", "name": "Pulmonary neoplasm", "points": 1, "done": false, "lastStudied": null}, {"id": "t_7_3", "name": "Pleura", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_7_4", "name": "Mediastinum", "points": 1, "done": false, "lastStudied": null}]}, {"id": "sys_8", "name": "Cardiovascular", "weight": 0.75, "topics": [{"id": "t_8_1", "name": "Heart", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_8_2", "name": "Blood vessels", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_9", "name": "Gastrointestinal", "weight": 4.5, "topics": [{"id": "t_9_1", "name": "Oesophagus", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_9_2", "name": "Stomach", "points": 1, "done": false, "lastStudied": null}, {"id": "t_9_3", "name": "Non-neoplastic intestinal diseases", "points": 1, "done": false, "lastStudied": null}, {"id": "t_9_4", "name": "Intestinal neoplasms", "points": 1, "done": false, "lastStudied": null}, {"id": "t_9_5", "name": "Pancreas", "points": 1, "done": false, "lastStudied": null}]}, {"id": "sys_10", "name": "Hepatobiliary", "weight": 2.5, "topics": [{"id": "t_10_1", "name": "Non-neoplastic liver diseases", "points": 1, "done": false, "lastStudied": null}, {"id": "t_10_2", "name": "Masses of the liver", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_10_3", "name": "Gallbladder, biliary tree and ampulla", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_10_4", "name": "Anus and perianal area", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_11", "name": "Renal", "weight": 2.75, "topics": [{"id": "t_11_1", "name": "Developmental abnormalities of the kidney", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_11_2", "name": "Non-neoplastic renal pathology", "points": 1, "done": false, "lastStudied": null}, {"id": "t_11_3", "name": "Adult renal tumours", "points": 1, "done": false, "lastStudied": null}, {"id": "t_11_4", "name": "Renal neoplasms of Childhood", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_12", "name": "Lower urinary tract", "weight": 1, "topics": [{"id": "t_12_1", "name": "The urothelial tract", "points": 1, "done": false, "lastStudied": null}]}, {"id": "sys_13", "name": "Male genital tract", "weight": 2.25, "topics": [{"id": "t_13_1", "name": "Prostate and seminal vesicles", "points": 1, "done": false, "lastStudied": null}, {"id": "t_13_2", "name": "Testis - non tumour", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_13_3", "name": "Testis and paratesticular tumours", "points": 0.75, "done": false, "lastStudied": null}, {"id": "t_13_4", "name": "Penis and scrotum", "points": 0.25, "done": false, "lastStudied": null}]}, {"id": "sys_14", "name": "Gynaecological pathology", "weight": 6.25, "topics": [{"id": "t_14_1", "name": "Gestational trophoblastic disease", "points": 0.75, "done": false, "lastStudied": null}, {"id": "t_14_2", "name": "Placenta", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_14_3", "name": "Vulva and Vagina", "points": 0.75, "done": false, "lastStudied": null}, {"id": "t_14_4", "name": "Cervix", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_14_5", "name": "Uterine corpus", "points": 0.75, "done": false, "lastStudied": null}, {"id": "t_14_6", "name": "Ovarian surface epithelial-stromal tumours", "points": 1, "done": false, "lastStudied": null}, {"id": "t_14_7", "name": "Sex cord-stromal, steroid cell and Germ cell tumours of the ovary", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_14_8", "name": "Miscellaneous tumour of ovary", "points": 1, "done": false, "lastStudied": null}, {"id": "t_14_9", "name": "Fallopian tube and broad ligament", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_14_10", "name": "Peritoneum", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_15", "name": "Molecular & ancillary pathology", "weight": 5.5, "topics": [{"id": "t_15_1", "name": "Molecular Pathology (Techniques, interpretation, common mutations)", "points": 3, "done": false, "lastStudied": null}, {"id": "t_15_2", "name": "Immunohistochemistry (Techniques, interpretation, validation)", "points": 1, "done": false, "lastStudied": null}, {"id": "t_15_3", "name": "Histochemistry (Special stains), tissue preparation and frozen section", "points": 1, "done": false, "lastStudied": null}, {"id": "t_15_4", "name": "Ultrastructural examination", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_15_5", "name": "Immunofluorescence study", "points": 0.25, "done": false, "lastStudied": null}]}, {"id": "sys_16", "name": "Laboratory management & quality", "weight": 1.75, "topics": [{"id": "t_16_1", "name": "Laboratory management, setting up a lab, LEAN, six sigma etc", "points": 0.5, "done": false, "lastStudied": null}, {"id": "t_16_2", "name": "Laboratory safety - bio / chemical hazard", "points": 0.75, "done": false, "lastStudied": null}, {"id": "t_16_3", "name": "Accreditation issue, Quality Assurance", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_17", "name": "Autopsy", "weight": 0.5, "topics": [{"id": "t_17_1", "name": "Autopsy - handling of death, biochem and radi risk", "points": 0.125, "done": false, "lastStudied": null}, {"id": "t_17_2", "name": "Autopsy - Adult pathology", "points": 0.25, "done": false, "lastStudied": null}, {"id": "t_17_3", "name": "Autopsy - Perinatal and foetal pathology", "points": 0.125, "done": false, "lastStudied": null}]}, {"id": "sys_18", "name": "Cytopathology", "weight": 4.5, "topics": [{"id": "t_18_1", "name": "Cytopathology", "points": 4, "done": false, "lastStudied": null}, {"id": "t_18_2", "name": "Cytology lab preparation", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_19", "name": "Information technology & statistics", "weight": 0.5, "topics": [{"id": "t_19_1", "name": "Information technology, data analysis and statistics", "points": 0.5, "done": false, "lastStudied": null}]}, {"id": "sys_20", "name": "Grossing", "weight": 1, "topics": [{"id": "t_20_1", "name": "Grossing (Trimming technique and complex specimen)", "points": 1, "done": false, "lastStudied": null}]}, {"id": "sys_21", "name": "Buffer", "weight": 4, "topics": [{"id": "t_21_1", "name": "Buffer", "points": 4, "done": false, "lastStudied": null}]}];
+const KEY="adaptiveStudyPlannerV7";
+let data;
+
+function fresh(){
+  return {version:7,curriculum:JSON.parse(JSON.stringify(SEED)),exams:[],general:[],examStudy:[],
+    weeks:{},days:{},currentWeek:null};
+}
+function load(){
+  try{const x=JSON.parse(localStorage.getItem(KEY)||"null"); return x&&x.version===7?x:fresh()}
+  catch(e){return fresh()}
+}
+data=load();
+
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(data));
+  document.getElementById("saveStatus").textContent="Saved · "+new Date().toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+}
+function uid(p){return p+"_"+Date.now()+"_"+Math.random().toString(36).slice(2,7)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function h(n){n=Math.round((Number(n)||0)*2)/2;return (Number.isInteger(n)?n.toFixed(0):n.toFixed(1))+" h"}
+function dateKey(d=new Date()){return new Date(d).toISOString().slice(0,10)}
+function weekStart(d=new Date()){
+  const x=new Date(d);x.setHours(0,0,0,0);const day=x.getDay()||7;x.setDate(x.getDate()-day+1);return x
+}
+function weekKey(d=new Date()){return dateKey(weekStart(d))}
+function weekLabel(){
+  const s=weekStart(),e=new Date(s);e.setDate(e.getDate()+6);
+  const f=d=>d.toLocaleDateString([], {day:"numeric",month:"short"});
+  return f(s)+" – "+f(e)
+}
+function currentWeek(){
+  const k=weekKey();
+  if(!data.weeks[k]) data.weeks[k]={longitudinal:[],immediate:[],runningHours:3,runningDays:3,lifeHours:4,lifeLabel:"Rest / life",finalised:false,completed:{}};
+  return data.weeks[k]
+}
+function allTopics(){
+  return data.curriculum.flatMap(s=>s.topics.map(t=>({...t,systemId:s.id,system:s.name,weight:Number(s.weight)||0})));
+}
+function curriculumStats(){
+  const ts=allTopics(),done=ts.filter(t=>t.done).length;
+  return {total:ts.length,done,pct:ts.length?Math.round(done/ts.length*100):0}
+}
+function systemPct(s){return s.topics.length?Math.round(s.topics.filter(t=>t.done).length/s.topics.length*100):0}
+function systemPoints(s){return s.topics.reduce((a,t)=>a+(Number(t.points)||0),0)}
+
+function renderCurriculum(){
+  const st=curriculumStats();
+  document.getElementById("currMeta").textContent=st.done+" / "+st.total+" topics completed";
+  document.getElementById("currPct").textContent=st.pct+"%";
+  document.getElementById("currBar").style.width=st.pct+"%";
+  document.getElementById("systems").innerHTML=data.curriculum.map((s,si)=>{
+    const p=systemPct(s);
+    return `<div class="sys">
+      <div class="syshead">
+        <input class="sysnameedit" data-si="${si}" value="${esc(s.name)}" style="font-weight:700">
+        <div class="weight"><input class="sysweight" data-si="${si}" type="number" min="0" step=".25" value="${Number(s.weight)||0}" title="System weight"></div>
+        <div class="sysbar"><div class="statline"><span>${p}% complete</span><span>${s.topics.filter(t=>t.done).length}/${s.topics.length}</span></div><div class="progress"><i style="width:${p}%"></i></div></div>
+        <button class="small ghost delsys" data-si="${si}">Delete</button>
+      </div>
+      <div class="sysbody">
+        ${s.topics.map((t,ti)=>`<div class="topic">
+          <input type="checkbox" class="topicdone" data-si="${si}" data-ti="${ti}" ${t.done?"checked":""}>
+          <input class="topicname" data-si="${si}" data-ti="${ti}" value="${esc(t.name)}">
+          <input class="topicpoints" data-si="${si}" data-ti="${ti}" type="number" min="0" step=".125" value="${Number(t.points)||0}" title="Reference points">
+          <button class="small ghost deltopic" data-si="${si}" data-ti="${ti}">×</button>
+        </div>`).join("")}
+        <div class="addtopic"><input class="newtopic" data-si="${si}" placeholder="Add topic — press Enter"><button class="small addtopicbtn" data-si="${si}">Add</button></div>
+      </div>
+    </div>`
+  }).join("");
+}
+function renderExams(){
+  const host=document.getElementById("exams");
+  host.innerHTML=data.exams.length?data.exams.map((e,i)=>{
+    const days=Math.ceil((new Date(e.date+"T23:59:59")-new Date())/86400000);
+    return `<div class="exam"><div class="row" style="justify-content:space-between"><strong>${esc(e.name)}</strong><span class="days">${days>=0?days+" days":"Past"}</span></div>
+      <div class="smallmuted">${esc(e.date)} <button class="small ghost delexam" data-i="${i}">Remove</button></div></div>`
+  }).join(""):"<div class='smallmuted'>No exams added yet.</div>";
+  const opts=data.exams.map((e,i)=>`<option value="${i}">${esc(e.name)}</option>`).join("");
+  document.getElementById("examStudyExam").innerHTML=opts||"<option value=''>Add an exam first</option>";
+}
+function renderActivities(){
+  document.getElementById("generalList").innerHTML=data.general.length?data.general.map((x,i)=>`<div class="week-item"><b>${esc(x.name)}</b><div class="meta">${h(x.hours)}/week <button class="small ghost delgen" data-i="${i}">Remove</button></div></div>`).join(""):"<div class='smallmuted'>None yet.</div>";
+  document.getElementById("examStudyList").innerHTML=data.examStudy.length?data.examStudy.map((x,i)=>{
+    const e=data.exams[x.examIndex]?.name||"Exam";
+    return `<div class="week-item"><b>${esc(x.name)}</b><div class="meta">${esc(e)} · ${h(x.hours)}/week <button class="small ghost delexamstudy" data-i="${i}">Remove</button></div></div>`
+  }).join(""):"<div class='smallmuted'>None yet.</div>";
+}
+function renderWeek(){
+  const w=currentWeek();
+  document.getElementById("weekDates").textContent=weekLabel();
+  document.getElementById("runWeeklyHours").value=w.runningHours;
+  document.getElementById("runDays").value=w.runningDays;
+  document.getElementById("lifeHours").value=w.lifeHours;
+  document.getElementById("lifeLabel").value=w.lifeLabel;
+  document.getElementById("finalStatus").textContent=w.finalised?"Finalised for "+weekLabel()+".":"Not finalised yet.";
+  const items=w.longitudinal||[];
+  document.getElementById("longSuggestions").innerHTML=items.length?items.map((x,i)=>`<div class="week-item"><b>${esc(x.system)}</b> · ${h(x.hours)}<div class="meta">${esc(x.topic||"")}</div></div>`).join(""):"<div class='smallmuted'>No longitudinal allocation yet.</div>";
+  document.getElementById("immediateList").innerHTML=(w.immediate||[]).map((x,i)=>`<div class="week-item"><b>${esc(x.type)}</b> · ${esc(x.topic)} <button class="small ghost delimm" data-i="${i}">Remove</button></div>`).join("");
+  const target=(items.reduce((a,x)=>a+x.hours,0)+Number(w.runningHours||0)+Number(w.lifeHours||0));
+  const completed=Object.values(w.completed||{}).reduce((a,x)=>a+(Number(x.hours)||0),0);
+  document.getElementById("weekProgress").innerHTML=`<div class="statline"><span>Week balance</span><b>${target?Math.min(100,Math.round(completed/target*100)):0}%</b></div><div class="progress"><i style="width:${target?Math.min(100,Math.round(completed/target*100)):0}%"></i></div><div class="smallmuted" style="margin-top:6px">Targets: ${h(target)} across study, running and life allocations.</div>`;
+}
+function refreshFocus(){
+  const sel=document.getElementById("focus");
+  const old=sel.value;
+  sel.innerHTML="<option value=''>No preference — system plans</option>";
+  const w=currentWeek();
+  (w.longitudinal||[]).forEach((x,i)=>sel.insertAdjacentHTML("beforeend",`<option value="long:${i}">${esc(x.system)} — ${esc(x.topic||"topic")}</option>`));
+  (w.immediate||[]).forEach((x,i)=>sel.insertAdjacentHTML("beforeend",`<option value="imm:${i}">${esc(x.type)} — ${esc(x.topic)}</option>`));
+  sel.value=old;
+}
+function renderToday(){
+  const w=currentWeek();
+  document.getElementById("weekSummary").innerHTML=`
+    <div class="week-item"><b>Longitudinal</b><div class="meta">${h((w.longitudinal||[]).reduce((a,x)=>a+x.hours,0))}</div></div>
+    <div class="week-item"><b>Immediate</b><div class="meta">${w.immediate?.length||0} item(s)</div></div>
+    <div class="week-item"><b>Running</b><div class="meta">${h(w.runningHours)} across ${w.runningDays} day(s)</div></div>
+    <div class="week-item"><b>${esc(w.lifeLabel)}</b><div class="meta">${h(w.lifeHours)}</div></div>`;
+  refreshFocus();
+}
+function renderAll(){renderCurriculum();renderExams();renderActivities();renderWeek();renderToday()}
+
+function examUrgency(){
+  const now=new Date();let best=0;
+  data.exams.forEach(e=>{
+    const days=(new Date(e.date)-now)/86400000;
+    if(days>=0) best=Math.max(best,Math.max(0,10-days/30));
+  });
+  return best;
+}
+function candidateScore(t){
+  const sys=data.curriculum.find(s=>s.id===t.systemId);
+  const remain=(sys?.topics||[]).filter(x=>!x.done).length;
+  const total=sys?.topics.length||1;
+  const last=t.lastStudied?((Date.now()-new Date(t.lastStudied))/86400000):30;
+  const weight=Number(sys?.weight)||1;
+  return weight*.45+(remain/total*10)*.30+Math.min(last/30,5)*.15+examUrgency()*.10;
+}
+function suggestWeekly(){
+  const total=Math.round((Number(document.getElementById("weeklyLongHours").value)||0)*2)/2;
+  const open=allTopics().filter(t=>!t.done);
+  const grouped={};
+  open.sort((a,b)=>candidateScore(b)-candidateScore(a));
+  // Allocate in 0.5h chunks, favouring higher-scoring systems but spread across systems.
+  let left=total;
+  for(const t of open){
+    if(left<.5)break;
+    const s=data.curriculum.find(x=>x.id===t.systemId);
+    if(!grouped[t.systemId]) grouped[t.systemId]={system:s.name,topic:t.name,hours:0,score:candidateScore(t)};
+    const add=Math.min(.5,left);
+    grouped[t.systemId].hours+=add; left-=add;
+    if(Object.values(grouped).filter(x=>x.hours>0).length>=Math.min(5, data.curriculum.length) && left>=.5){
+      // continue allocating, but do not force every system
+    }
+  }
+  // If the curriculum is exhausted, fill with exam/general work.
+  const arr=Object.values(grouped);
+  while(left>=.5 && data.general.length){const x=data.general[0];arr.push({system:"General study",topic:x.name,hours:.5,score:0});left-=.5}
+  currentWeek().longitudinal=arr;
+  save();renderWeek();renderToday();
+}
+function parseTime(v){const [hh,mm]=String(v||"").split(":").map(Number);return (hh||0)*60+(mm||0)}
+function fmtTime(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0")}
+function generateEvening(){
+  const study=Math.max(0,Math.round((Number(document.getElementById("studyHours").value)||0)*2)/2);
+  const energy=Number(document.getElementById("energy").value)||3;
+  const run=document.getElementById("runTonight").value==="yes";
+  const runH=run?Math.max(0,Math.round((Number(document.getElementById("runHours").value)||0)*2)/2):0;
+  const now=parseTime(document.getElementById("nowTime").value), sleep=parseTime(document.getElementById("sleepTime").value);
+  const context=(document.getElementById("context").value||"").toLowerCase();
+  const focus=document.getElementById("focus").value;
+  const w=currentWeek();
+  let candidates=[];
+  (w.immediate||[]).forEach((x,i)=>candidates.push({kind:x.type,task:x.topic,score:10-i*0.1,heavy:false,focus:"imm:"+i}));
+  const ts=allTopics().filter(t=>!t.done).map(t=>({kind:"Longitudinal",task:t.name,system:t.system,score:candidateScore(t),heavy:/renal|haem|heme|molecular|neoplasm|tumou?r|neuropath/i.test(t.system+" "+t.name),focus:""}));
+  candidates.push(...ts);
+  (data.examStudy||[]).forEach((x,i)=>candidates.push({kind:"Exam study",task:x.name,system:"Exam",score:7+examUrgency(),heavy:false,focus:""}));
+  if(focus){
+    const chosen=candidates.find(x=>x.focus===focus);
+    if(chosen){chosen.score+=8}
+  }
+  if(energy<=2 || /tired|exhausted|horrible|bad day|drained|brain dead|low energy/.test(context)){
+    candidates.forEach(x=>{if(x.heavy)x.score-=3;else x.score+=1});
+  }
+  if(/urgent|tomorrow|deadline|presentation|mdm|tutorial/.test(context)){
+    candidates.forEach(x=>{if(x.kind!=="Longitudinal")x.score+=4});
+  }
+  candidates.sort((a,b)=>b.score-a.score);
+  const blocks=[];let left=study;
+  while(left>=.5 && candidates.length){
+    const c=candidates.shift();
+    const chunk=(energy<=2&&c.heavy)?.5:Math.min(1,left);
+    blocks.push({type:"study",hours:chunk,task:c.task,kind:c.kind,system:c.system||""});
+    left-=chunk;
+  }
+  if(!blocks.length&&study>0)blocks.push({type:"study",hours:study,task:"Light review / consolidate an outstanding topic",kind:"Longitudinal"});
+  const start=now||18*60;
+  const totalMinutes=study*60+runH*60+60; // one hour buffer for dinner/shower/decompression
+  const available=(sleep-start+1440)%1440;
+  let warning="";
+  if(sleep && available<totalMinutes){warning="Your requested study + run + a basic evening buffer is tight before sleep. Sleep is protected; the plan is compressed rather than extending bedtime."}
+  let cursor=start, rows=[];
+  if(runH){rows.push({time:fmtTime(cursor)+"–"+fmtTime(cursor+runH*60),task:"Run",kind:h(runH)});cursor+=runH*60}
+  rows.push({time:fmtTime(cursor)+"–"+fmtTime(cursor+60),task:"Dinner / shower / decompression",kind:"Buffer"});cursor+=60;
+  blocks.forEach(b=>{rows.push({time:fmtTime(cursor)+"–"+fmtTime(cursor+b.hours*60),task:b.task,kind:b.kind+(b.system?" · "+b.system:"")});cursor+=b.hours*60});
+  return {study,runH,energy,rows,warning,context};
+}
+function showPlan(p){
+  const w=currentWeek();data.days[dateKey()]={...(data.days[dateKey()]||{}),checkin:{studyHours:p.study,runHours:p.runH,energy:p.energy,context:p.context},plan:p};
+  save();
+  document.getElementById("planOutput").innerHTML=`<div class="notice ${p.warning?"warning":""}">
+    <b>${p.warning?"A tighter evening":"Plan built around your actual capacity"}</b>
+    <div style="margin-top:4px">${p.warning||"The engine prioritised urgency, unfinished weighted curriculum, recency, exam proximity, energy and your stated context."}</div>
+  </div>
+  <div class="card" style="box-shadow:none;margin-top:10px;padding:8px 14px">
+    ${p.rows.map(r=>`<div class="planrow"><div class="plantime">${esc(r.time)}</div><div class="plantask"><b>${esc(r.task)}</b><div class="smallmuted">${esc(r.kind)}</div></div></div>`).join("")}
+  </div>
+  <div class="row" style="margin-top:10px"><button class="small primary" id="markPlanDone">Mark study plan completed</button></div>`;
+  document.getElementById("markPlanDone").onclick=()=>{
+    const hours=p.study;const wk=currentWeek();wk.completed=wk.completed||{};wk.completed[dateKey()]={hours,runHours:p.runH,at:new Date().toISOString()};
+    // Mark the first relevant topic(s) as studied/completed only when the user explicitly confirms.
+    let remaining=hours;
+    const ordered=allTopics().filter(t=>!t.done).sort((a,b)=>candidateScore(b)-candidateScore(a));
+    for(const t of ordered){
+      if(remaining<.5)break;
+      const s=data.curriculum.find(x=>x.id===t.systemId), real=s.topics.find(x=>x.id===t.id);
+      real.lastStudied=new Date().toISOString();
+      // Completing a topic is deliberately explicit: plan completion does not silently tick topics.
+      remaining-=.5;
+    }
+    save();renderAll();document.getElementById("markPlanDone").textContent="Saved as completed";
+  };
+}
+
+document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("nav button").forEach(x=>x.classList.remove("active"));b.classList.add("active");
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));document.getElementById(b.dataset.view).classList.add("active");
+  renderAll();
+});
+
+document.getElementById("systems").addEventListener("change",e=>{
+  const el=e.target,si=Number(el.dataset.si),ti=Number(el.dataset.ti);
+  if(el.classList.contains("topicdone")) data.curriculum[si].topics[ti].done=el.checked;
+  if(el.classList.contains("topicname")) data.curriculum[si].topics[ti].name=el.value;
+  if(el.classList.contains("topicpoints")) data.curriculum[si].topics[ti].points=Number(el.value)||0;
+  if(el.classList.contains("sysnameedit")) data.curriculum[si].name=el.value;
+  if(el.classList.contains("sysweight")) data.curriculum[si].weight=Number(el.value)||0;
+  save();renderCurriculum();refreshFocus();
+});
+document.getElementById("systems").addEventListener("click",e=>{
+  const b=e.target,si=Number(b.dataset.si),ti=Number(b.dataset.ti);
+  if(b.classList.contains("delsys") && confirm("Delete this system and its topics?")){data.curriculum.splice(si,1);save();renderAll()}
+  if(b.classList.contains("deltopic")){data.curriculum[si].topics.splice(ti,1);save();renderAll()}
+  if(b.classList.contains("addtopicbtn")) addTopic(si,b.parentElement.querySelector(".newtopic").value);
+});
+document.getElementById("systems").addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.classList.contains("newtopic")){e.preventDefault();addTopic(Number(e.target.dataset.si),e.target.value)}
+});
+function addTopic(si,name){name=String(name||"").trim();if(!name)return;data.curriculum[si].topics.push({id:uid("t"),name,points:.5,done:false,lastStudied:null});save();renderAll()}
+document.getElementById("addSystem").onclick=()=>{data.curriculum.push({id:uid("sys"),name:"New system",weight:1,topics:[]});save();renderAll()}
+document.getElementById("addExam").onclick=()=>{const n=examName.value.trim(),d=examDate.value;if(!n||!d)return alert("Enter an exam name and date.");data.exams.push({name:n,date:d});examName.value="";examDate.value="";save();renderAll()}
+document.getElementById("exams").addEventListener("click",e=>{if(e.target.classList.contains("delexam")){data.exams.splice(Number(e.target.dataset.i),1);save();renderAll()}})
+document.getElementById("addGeneral").onclick=()=>{const n=generalName.value.trim();if(!n)return;data.general.push({name:n,hours:Number(generalHours.value)||0});generalName.value="";save();renderAll()}
+document.getElementById("generalList").addEventListener("click",e=>{if(e.target.classList.contains("delgen")){data.general.splice(Number(e.target.dataset.i),1);save();renderAll()}})
+document.getElementById("addExamStudy").onclick=()=>{const n=examStudyName.value.trim(),ei=Number(examStudyExam.value);if(!n||Number.isNaN(ei))return;data.examStudy.push({name:n,examIndex:ei,hours:Number(examStudyHours.value)||0});examStudyName.value="";save();renderAll()}
+document.getElementById("examStudyList").addEventListener("click",e=>{if(e.target.classList.contains("delexamstudy")){data.examStudy.splice(Number(e.target.dataset.i),1);save();renderAll()}})
+document.getElementById("suggestWeek").onclick=suggestWeekly;
+document.getElementById("addImmediate").onclick=()=>{const t=immTopic.value.trim();if(!t)return;currentWeek().immediate.push({type:immType.value,topic:t});immTopic.value="";save();renderAll()}
+document.getElementById("immediateList").addEventListener("click",e=>{if(e.target.classList.contains("delimm")){currentWeek().immediate.splice(Number(e.target.dataset.i),1);save();renderAll()}})
+["runWeeklyHours","runDays","lifeHours","lifeLabel"].forEach(id=>document.getElementById(id).addEventListener("change",()=>{const w=currentWeek();w.runningHours=Number(runWeeklyHours.value)||0;w.runningDays=Number(runDays.value)||0;w.lifeHours=Number(lifeHours.value)||0;w.lifeLabel=lifeLabel.value||"Rest / life";save();renderAll()}));
+document.getElementById("finaliseBtn").onclick=()=>{currentWeek().finalised=true;save();renderAll();alert("Week finalised. You can still edit it later if reality changes.");};
+document.getElementById("planBtn").onclick=()=>showPlan(generateEvening());
+document.getElementById("lessBtn").onclick=()=>{studyHours.value=Math.max(0,Number(studyHours.value)-.5);showPlan(generateEvening())}
+document.getElementById("moreBtn").onclick=()=>{studyHours.value=Math.min(8,Number(studyHours.value)+.5);showPlan(generateEvening())}
+document.getElementById("nowTime").value=new Date().toTimeString().slice(0,5);
+
+document.getElementById("exportBtn").onclick=()=>{
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);a.download="adaptive-study-planner-backup-"+dateKey()+".json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)
+};
+document.getElementById("importBtn").onclick=()=>document.getElementById("importFile").click();
+document.getElementById("importFile").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||x.version!==7)throw 0;if(confirm("Replace current planner data with this backup?")){data=x;save();renderAll()}}catch(err){alert("That backup could not be read.")}};
+  r.readAsText(f);
+};
+document.getElementById("clearBtn").onclick=()=>{if(confirm("Clear all planner data from this browser? Export a backup first if you want to keep it.")){localStorage.removeItem(KEY);data=fresh();save();renderAll()}};
+
+setInterval(()=>{renderExams()},60000);
+renderAll();save();
+</script>
+</body></html>
